@@ -26,7 +26,27 @@ async function publish(msg) {
 }
 
 for (let i = 0; i < 5; i++) {
-  publish('message #' + i);
+  /*
+     Regions
+      X
+     Services
+      X
+     Commands => 
+
+     Regions (not sure if second level is necessary) 
+      X
+     Command
+      X
+     details (more for pagination)
+   */
+  const message = {
+    region: 'us-east-1',
+    service: 's3',
+    operation: 'listBuckets'
+  };
+
+  // can each of these operations run inside lambda?
+  publish('message #' + JSON.stringify(message));
 }
 
 // TODO: take accounts as inputs
