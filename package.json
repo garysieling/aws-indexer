@@ -1,0 +1,30 @@
+{
+  "name": "aws-indexer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "run-when-changed --watch \"**/*.js\" --exec \"node src/index.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garysieling/aws-indexer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/garysieling/aws-indexer/issues"
+  },
+  "homepage": "https://github.com/garysieling/aws-indexer#readme",
+  "dependencies": {
+    "async": "^3.1.0",
+    "aws-sdk": "^2.518.0",
+    "axios": "^0.19.0",
+    "lodash": "^4.17.15",
+    "watchify": "^3.11.1"
+  },
+  "devDependencies": {
+    "run-when-changed": "^2.1.0"
+  }
+}
