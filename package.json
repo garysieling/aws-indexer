@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/index.js",
     "watch": "run-when-changed --watch \"**/*.js\" --exec \"node src/index.js\""
   },
   "repository": {
@@ -25,6 +26,10 @@
     "watchify": "^3.11.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "nodemon": "^1.19.1",
     "run-when-changed": "^2.1.0"
   }
 }

@@ -6,6 +6,57 @@ const regions = ['us-east-2', 'us-east-1', 'us-west-1', 'us-west-2', 'ap-east-1'
 
 console.log(regions);
 
+const services = [
+  require('./tasks/cf'),
+  //require('./tasks/ec2'),
+  //require('./tasks/s3'),
+  //require('./tasks/sns')
+];
+
+(async () => {
+  services.map(
+    (module) => {
+      module.default.tasks.map(
+        async (task) => {
+          try {
+            const region = 'us-east-1';
+            const indexData = await task({region});
+
+            const keys = _.keys(indexData);
+
+            keys.map(
+              (key) => {
+                console.log(key)
+                console.log(indexData)
+                const rows = indexData[key];
+
+                if (key !== 'ResponseMetadata') {
+                  rows.map(
+                    (row) => {
+                      const toIndex = {};
+
+                      toIndex.data = row;
+                      toIndex.metadata = {};
+                      toIndex.metadata.region = region;
+                      toIndex.metadata.key = key;
+                      toIndex.metadata.timestamp = new Date();
+
+                      console.log(toIndex);
+                    }
+                  );
+                }
+              }
+            )
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      )
+    }
+  )
+})()
+
+/*
 const sns = new AWS.SNS({ endpoint: 'http://localhost:4575', region: 'us-east-1' });
 const sqs = new AWS.SQS({ endpoint: 'http://localhost:4576', region: 'us-east-1' });
 
@@ -27,7 +78,7 @@ async function publish(msg) {
 
 for (let i = 0; i < 5; i++) {
   publish('message #' + i);
-}
+}*/
 
 // TODO: take accounts as inputs
 // TODO: expand regions
