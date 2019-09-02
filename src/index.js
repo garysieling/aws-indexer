@@ -9,10 +9,14 @@ console.log(regions);
 
 const services = [
   require('./tasks/cf'),
+  require('./tasks/cloudwatch'),
+  require('./tasks/dynamodb'),
   require('./tasks/ec2'),
+  require('./tasks/iam'),
+  require('./tasks/lambda'),
+  require('./tasks/rds'),
   require('./tasks/s3'),
   require('./tasks/sns'),
-  require('./tasks/cloudwatch'),
 ];
 
 // TODO - I think it would make sense to link this all into a graph database
@@ -21,16 +25,22 @@ const services = [
 (async () => {
   const { Client } = require('@elastic/elasticsearch');
   const client = new Client({ node: 'http://localhost:9200' });
-  client.indices.create({index: 'aws'});
-
-  await client.deleteByQuery({ 
-    index: "aws",
-    body: { query: { match_all: {} } }
-  })
 
   const sts = new AWS.STS();
   const identity = await sts.getCallerIdentity().promise();
-  
+    
+  const indexName = 'aws-' + identity.accountId;
+  try {
+    await client.indices.create({index: indexName});
+  } catch (e) {
+    console.log(e);
+  }
+
+  await client.deleteByQuery({ 
+    index: indexName,
+    body: { query: { match_all: {} } }
+  })
+
   regions.map(
     async (region) => {
       const regionParams = {region};
