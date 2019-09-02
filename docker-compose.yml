@@ -7,6 +7,7 @@ services:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node" 
     ulimits:
       memlock:
         soft: -1
@@ -17,3 +18,10 @@ services:
     image: docker.elastic.co/kibana/kibana:7.3.1
     ports:
       - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+
+
+#
+# [1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+# elasticsearch_1  | [2]: the default discovery settings are unsuitable for production use; at least one of [discovery.seed_hosts, discovery.seed_providers, cluster.initial_master_nodes] must be configured
