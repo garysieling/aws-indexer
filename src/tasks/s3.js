@@ -5,6 +5,6 @@ const product = (params) => new AWS.S3(params);
 
 export default { 
   tasks: [
-    (params) => product(params).listBuckets().promise()
+    (params) => ['AWS::S3::Bucket', product(params).listBuckets().promise()]
   ]
 }

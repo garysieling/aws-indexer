@@ -4,6 +4,6 @@ const product = (params) => new AWS.SNS(params);
 
 export default { 
   tasks: [
-    (params) => product(params).listTopics().promise()
+    (params) => ['AWS::SNS::Topic', product(params).listTopics().promise()]
   ]
 }
