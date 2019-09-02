@@ -7,7 +7,36 @@ const regions = ['us-east-1'];
 
 console.log(regions);
 
+const cdk = require('@aws-cdk/cfnspec');
+const allTypes = _.keys(cdk.specification().ResourceTypes);
+let indexedTypes = _.clone(allTypes);
+
+/*
+  TODO - WAF / WAF Regional
+  TODO - API gateway v1
+  TODO - CodeDeploy
+  TODO - CodeCommit 
+  TODO - CodePipeline
+  TODO - SQS
+  TODO - Sagemaker
+  TODO - Route53
+  TODO - Elasticache
+  TODO - Guardduty
+  TODO - Elasticsearch
+  TODO - ECS
+  TODO - EFS
+  TODO - ECR
+  TODO - Config
+  TODO - More of cloudwatch
+  TODO - Cloud9
+  TODO - Certificate manager
+  TODO - Autoscaling
+  TODO - Cognito
+  TODO - step functions
+*/
+
 const services = [
+  require('./tasks/api-gateway'),
   require('./tasks/cf'),
   require('./tasks/cloudwatch'),
   require('./tasks/dynamodb'),
@@ -16,11 +45,23 @@ const services = [
   require('./tasks/lambda'),
   require('./tasks/rds'),
   require('./tasks/s3'),
+  require('./tasks/secrets'),
   require('./tasks/sns'),
 ];
 
 // TODO - I think it would make sense to link this all into a graph database
 // TODO - Cross account indexing
+// TODO - some metdata like "production" and "product" 
+
+// Ideas:
+//    Could you go from an account to Cloudformation?
+//    A report with a heat map of products vs region
+//    Could you get pricing data - weight report of products by cost vs. free
+//    Make a report of region usage
+//    If this was in Neo4j, could you write sql queries on it - find circular references in Cloudformation
+//    Can you detect the presences of the serverless framework?
+//    Could you make a link builder to the different products
+//      Would allow alternate UIs
 
 (async () => {
   const { Client } = require('@elastic/elasticsearch');
@@ -54,6 +95,7 @@ const services = [
               try {
                 const [objectType, taskPromise] = task(regionParams);
 
+                indexedTypes = indexedTypes.filter( (t) => t !== objectType );
                 console.log('Crawling ' + region + ' ' + objectType);
 
                 const indexData = await taskPromise;
@@ -106,7 +148,9 @@ const services = [
                       );
                     }
                   }
-                )
+                );
+
+                console.log('Types indexed: ' + (allTypes.length - indexedTypes.length) + ' / ' + allTypes.length);
               } catch (e) {
                 console.error(e);
               }
@@ -117,6 +161,8 @@ const services = [
     }
   )
 })()
+
+
 
 /*
 const sns = new AWS.SNS({ endpoint: 'http://localhost:4575', region: 'us-east-1' });
