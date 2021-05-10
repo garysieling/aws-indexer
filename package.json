@@ -24,7 +24,7 @@
     "async": "^3.1.0",
     "aws-sdk": "^2.518.0",
     "axios": "^0.19.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "watchify": "^3.11.1"
   },
   "devDependencies": {
